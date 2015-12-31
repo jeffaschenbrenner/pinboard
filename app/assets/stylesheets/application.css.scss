@@ -70,7 +70,7 @@ nav {
 	}
 }
 
-#edit_page {
+#pin_edit {
 	.current_image {
 		img {
 			display: block;
@@ -115,4 +115,10 @@ nav {
 
 textarea {
 	min-height: 250px;
+	max-width: 100%;
+}
+
+.btn.no-hover:hover {
+	cursor: default !important;
+	background-color: white;
 }

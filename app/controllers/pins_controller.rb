@@ -1,5 +1,5 @@
 class PinsController < ApplicationController
-	before_action :find_pin, only: [:show, :edit, :update, :destroy, :upvote]
+	before_action :find_pin, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 	before_action :authenticate_user!, except: [:index, :show]
 
 	def index
@@ -24,6 +24,9 @@ class PinsController < ApplicationController
 	end
 
 	def edit
+		if current_user != @pin.user
+			redirect_to @pin, notice: "You are not authorized to modify this Pin."
+		end
 	end
 
 	def update
@@ -40,7 +43,20 @@ class PinsController < ApplicationController
 	end
 
 	def upvote
-		@pin.upvote_by current_user
+		if current_user.voted_up_on? @pin
+			@pin.unvote_by current_user
+		else
+			@pin.upvote_by current_user
+		end
+		redirect_to :back
+	end
+
+	def downvote
+		if current_user.voted_down_on? @pin
+			@pin.unvote_by current_user
+		else
+			@pin.downvote_by current_user
+		end
 		redirect_to :back
 	end
 
